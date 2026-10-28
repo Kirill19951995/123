@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Постановка ударения — тренажёр ЕГЭ</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #fdf2f8 0%, #f8fafc 45%, #eef2ff 100%);
+      color: #0f172a;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 18px;
+    }
+
+    .app { width: min(880px, 100%); }
+
+    header { text-align: center; margin-bottom: 24px; }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: clamp(22px, 4vw, 30px);
+      line-height: 1.2;
+      color: #4c1d95;
+    }
+
+    .header-sub { margin: 0; color: #64748b; font-size: 14px; }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border: 1px solid #ede9fe;
+      border-radius: 22px;
+      box-shadow: 0 20px 45px rgba(76, 29, 149, 0.1);
+      padding: clamp(18px, 4vw, 32px);
+    }
+
+    .hidden { display: none !important; }
+
+    :root {
+      --accent: #7c3aed;
+      --accent-dark: #6d28d9;
+      --accent-soft: #ede9fe;
+      --accent-bg: #f5f3ff;
+    }
+
+    .menu-title {
+      text-align: center;
+      margin: 0 0 6px;
+      font-size: clamp(18px, 3vw, 22px);
+      color: #1e293b;
+    }
+
+    .menu-sub {
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+      margin: 0 0 22px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .menu-grid .topic-card:first-child { grid-column: 1 / -1; }
+
+    @media (max-width: 560px) {
+      .menu-grid { grid-template-columns: 1fr; }
+    }
+
+    .topic-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 22px 20px;
+      cursor: pointer;
+      transition: 0.18s ease;
+      background: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 96px;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(76, 29, 149, 0.12);
+      border-color: var(--accent);
+    }
+
+    .topic-badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 800;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    .topic-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .back-link {
+      border: 0;
+      background: transparent;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: 0.15s ease;
+    }
+
+    .back-link:hover { background: #f1f5f9; color: #1e293b; }
+
+    .topic-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .bar {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+
+    .bar__fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #7c3aed, #06b6d4);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: clamp(18px, 3vw, 22px);
+      color: #1e293b;
+      text-align: center;
+    }
+
+    .quiz-subtitle {
+      text-align: center;
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .word-chips {
+      text-align: center;
+      font-size: clamp(30px, 7vw, 52px);
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #0f172a;
+      margin: 26px 0 30px;
+      line-height: 1.25;
+      word-break: break-word;
+    }
+
+    .word-chips .letter,
+    .word-chips .vowel {
+      display: inline-block;
+    }
+
+    .word-chips .vowel {
+      font: inherit;
+      color: #0f172a;
+      background: transparent;
+      border: 0;
+      border-bottom: 3px solid #94a3b8;
+      padding: 0 3px;
+      margin: 0 1px;
+      cursor: pointer;
+      transition: 0.15s ease;
+      border-radius: 6px 6px 0 0;
+    }
+
+    .word-chips .vowel:hover:not(:disabled) {
+      background: #e9e5ff;
+      border-bottom-color: var(--accent);
+    }
+
+    .word-chips .vowel:disabled { cursor: default; }
+
+    .word-chips .vowel.selected {
+      background: var(--accent-soft);
+      border-bottom: 3px solid var(--accent);
+      color: var(--accent-dark);
+    }
+
+    .word-chips .vowel.correct {
+      background: #dcfce7;
+      border-bottom: 3px solid #16a34a;
+      color: #14532d;
+    }
+
+    .word-chips .vowel.wrong {
+      background: #fee2e2;
+      border-bottom: 3px solid #dc2626;
+      color: #991b1b;
+    }
+
+    .word-chips .word-hint {
+      display: block;
+      font-size: 0.38em;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      transition: 0.2s ease;
+      box-shadow: 0 8px 18px rgba(124, 58, 237, 0.25);
+    }
+
+    .btn:hover:not(:disabled) { background: var(--accent-dark); transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn.secondary {
+      background: #e2e8f0;
+      color: #334155;
+      box-shadow: none;
+    }
+
+    .btn.secondary:hover { background: #cbd5e1; }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .feedback {
+      padding: 18px 20px;
+      border-radius: 14px;
+      font-size: 15px;
+      line-height: 1.6;
+      margin: 0 0 16px;
+      text-align: center;
+    }
+
+    .feedback.ok { background: #ecfdf5; color: #166534; border: 1px solid #bbf7d0; }
+    .feedback.bad { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    .feedback__answer {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .feedback__answer .stress {
+      text-transform: uppercase;
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+      text-underline-offset: 5px;
+    }
+
+    .feedback__meta {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .wrong-panel {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+    }
+
+    .wrong-panel__label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #991b1b;
+      margin-bottom: 6px;
+    }
+
+    .wrong-panel__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: 96px;
+      overflow-y: auto;
+    }
+
+    .wrong-word {
+      display: inline-block;
+      background: #fff;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: 2px 8px;
+      font-size: 13px;
+      color: #991b1b;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .wrong-word .stressed-letter {
+      text-transform: uppercase;
+      font-weight: 900;
+      color: #7c2d12;
+    }
+
+    .result { text-align: center; }
+
+    .result__wrong {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .result__wrong-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #991b1b;
+      margin-bottom: 8px;
+    }
+
+    .result__wrong-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .result__wrong-list .wrong-word {
+      background: #fff;
+      padding: 3px 10px;
+      font-size: 14px;
+    }
+
+    .result__score {
+      font-size: clamp(34px, 7vw, 54px);
+      font-weight: 900;
+      color: #4c1d95;
+      margin: 8px 0;
+    }
+
+    .result__percent {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .result__mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-size: 38px;
+      font-weight: 900;
+      margin: 10px 0 14px;
+    }
+
+    .result__message {
+      color: #475569;
+      font-size: 17px;
+      line-height: 1.55;
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 520px) {
+      .topline { font-size: 13px; }
+      .word-chips { font-size: 34px; }
+      .feedback__answer { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>Постановка ударения</h1>
+      <p class="header-sub">Задание 4 ЕГЭ</p>
+    </header>
+
+    <section id="menuScreen" class="card">
+      <h2 class="menu-title">Выберите раздел</h2>
+      <p class="menu-sub">Выберите ударную гласную</p>
+
+      <div class="menu-grid">
+        <div class="topic-card" data-group="all" role="button" tabindex="0">
+          <span class="topic-badge">Всё</span>
+          <div class="topic-title">Все слова</div>
+        </div>
+        <div class="topic-card" data-group="n" role="button" tabindex="0">
+          <span class="topic-badge">Часть 1</span>
+          <div class="topic-title">Имена существительные</div>
+        </div>
+        <div class="topic-card" data-group="v" role="button" tabindex="0">
+          <span class="topic-badge">Часть 2</span>
+          <div class="topic-title">Глаголы</div>
+        </div>
+        <div class="topic-card" data-group="p" role="button" tabindex="0">
+          <span class="topic-badge">Часть 3</span>
+          <div class="topic-title">Причастия и деепричастия</div>
+        </div>
+        <div class="topic-card" data-group="adj" role="button" tabindex="0">
+          <span class="topic-badge">Часть 4</span>
+          <div class="topic-title">Прилагательные и наречия</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="quizScreen" class="card hidden">
+      <div class="topbar">
+        <button class="back-link" id="backQuizBtn" type="button">← На главную</button>
+        <span class="topic-tag" id="groupTag">Ударение</span>
+      </div>
+
+      <div id="wrongPanel" class="wrong-panel hidden">
+        <div class="wrong-panel__label">Слова с ошибкой:</div>
+        <div id="wrongList" class="wrong-panel__list"></div>
+      </div>
+
+      <div class="topline">
+        <span id="progressText">Вопрос 1</span>
+        <span id="scoreText">Баллы: 0</span>
+      </div>
+      <div class="bar"><div id="barFill" class="bar__fill"></div></div>
+
+      <h2>Кликните на ударную гласную</h2>
+      <div class="quiz-subtitle" id="categoryHint"></div>
+
+      <div id="wordDisplay" class="word-chips"></div>
+      <div id="feedback" class="feedback hidden"></div>
+
+      <div class="actions">
+        <button id="checkBtn" class="btn" type="button" disabled>Проверить</button>
+        <button id="nextBtn" class="btn hidden" type="button">Следующее слово</button>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="card result hidden">
+      <h2>Результат</h2>
+      <div id="resultWrong" class="result__wrong hidden">
+        <div class="result__wrong-title">Слова с ошибкой:</div>
+        <div id="resultWrongList" class="result__wrong-list"></div>
+      </div>
+      <div id="resultScore" class="result__score">0</div>
+      <div id="resultPercent" class="result__percent">0%</div>
+      <div id="resultMark" class="result__mark">2</div>
+      <div id="resultMessage" class="result__message"></div>
+      <div class="actions">
+        <button id="restartBtn" class="btn" type="button">Пройти ещё раз</button>
+        <button id="backResultBtn" class="btn secondary" type="button">На главную</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const DATA = [
+      ["аэропОрты","n"], ["аэропОрт","n"],
+      ["бАнты","n"],
+      ["бОроду","n"],
+      ["бухгАлтеров","n"], ["бухгАлтер","n"],
+      ["вероисповЕдание","n"],
+      ["водопровОд","n"],
+      ["газопровОд","n"],
+      ["граждАнство","n"],
+      ["дефИс","n"],
+      ["дешевИзна","n"],
+      ["диспансЕр","n"],
+      ["договорЁнность","n"],
+      ["докумЕнт","n"],
+      ["досУг","n"],
+      ["еретИк","n"],
+      ["жалюзИ","n"],
+      ["знАчимость","n"],
+      ["Иксы","n"],
+      ["каталОг","n"],
+      ["квартАл","n"],
+      ["киломЕтр","n"],
+      ["кОнусов","n"], ["кОнус","n"],
+      ["корЫсть","n"],
+      ["крАны","n"],
+      ["кремЕнь","n"], ["кремнЯ","n"],
+      ["лЕкторов","n"], ["лЕктор","n"],
+      ["лОктя","n"], ["лОкоть","n"], ["локтЕй","n"],
+      ["лыжнЯ","n"],
+      ["мЕстностей","n"], ["мЕстность","n"],
+      ["намЕрение","n"],
+      ["нарОст","n"],
+      ["нЕдруг","n"],
+      ["недУг","n"],
+      ["некролОг","n"],
+      ["нЕнависть","n"],
+      ["нефтепровОд","n"],
+      ["новостЕй","n"], ["нОвость","n"],
+      ["нОгтя","n"], ["нОготь","n"], ["ногтЕй","n"],
+      ["Отзыв","n","о книге"],
+      ["отзЫв","n","посла из страны"],
+      ["Отрочество","n"],
+      ["партЕр","n"],
+      ["портфЕль","n"],
+      ["пОручни","n"],
+      ["придАное","n"],
+      ["призЫв","n"],
+      ["свЁкла","n"],
+      ["сирОты","n"], ["сиротА","n"],
+      ["созЫв","n"],
+      ["сосредотОчение","n"],
+      ["срЕдства","n"], ["срЕдство","n"],
+      ["стАтуя","n"],
+      ["столЯр","n"],
+      ["тамОжня","n"],
+      ["тОрты","n"],
+      ["тУфля","n"],
+      ["цемЕнт","n"],
+      ["цЕнтнер","n"],
+      ["цепОчка","n"],
+      ["шАрфы","n"],
+      ["шофЁр","n"],
+      ["экспЕрт","n"],
+
+      ["бралА","v"], ["бралАсь","v"], ["брАться","v"],
+      ["взялА","v"], ["взялАсь","v"], ["взЯться","v"],
+      ["влилАсь","v"], ["влИться","v"],
+      ["ворвалАсь","v"], ["ворвАться","v"],
+      ["воспринЯть","v"], ["воспринялА","v"],
+      ["воссоздалА","v"], ["воссоздАть","v"],
+      ["вручИт","v"], ["вручИть","v"],
+      ["гналА","v"], ["гналАсь","v"], ["гнАться","v"],
+      ["добралА","v"], ["добрАть","v"], ["добралАсь","v"], ["добрАться","v"],
+      ["дождалАсь","v"], ["дождАться","v"],
+      ["дозвонИтся","v"], ["дозвонИться","v"],
+      ["дозИровать","v"],
+      ["ждалА","v"],
+      ["жилОсь","v"], ["жИться","v"],
+      ["закУпорить","v"],
+      ["занЯть","v"], ["зАнял","v"], ["занялА","v"], ["зАняли","v"],
+      ["заперлА","v"], ["заперЕть","v"],
+      ["запломбировАть","v"],
+      ["защемИт","v"], ["защемИть","v"],
+      ["звалА","v"],
+      ["звонИт","v"], ["звонИть","v"],
+      ["кАшлянуть","v"],
+      ["клАла","v"],
+      ["клЕить","v"],
+      ["крАлась","v"], ["крАсться","v"],
+      ["кровоточИть","v"],
+      ["лгалА","v"],
+      ["лилА","v"], ["лилАсь","v"], ["лИться","v"],
+      ["навралА","v"], ["наврАть","v"],
+      ["наделИт","v"], ["наделИть","v"],
+      ["надорвалАсь","v"], ["надорвАться","v"],
+      ["назвалАсь","v"], ["назвАться","v"],
+      ["накренИтся","v"], ["накренИться","v"],
+      ["налилА","v"], ["налИть","v"],
+      ["нарвалА","v"], ["нарвАть","v"],
+      ["начАть","v"], ["нАчал","v"], ["началА","v"], ["нАчали","v"],
+      ["обзвонИт","v"], ["обзвонИть","v"],
+      ["облегчИть","v"], ["облегчИт","v"],
+      ["облилАсь","v"], ["облИться","v"],
+      ["обнялАсь","v"], ["обнЯться","v"],
+      ["обогналА","v"], ["обогнАть","v"],
+      ["ободралА","v"], ["ободрАть","v"],
+      ["ободрИть","v"], ["ободрИт","v"], ["ободрИться","v"], ["ободрИтся","v"],
+      ["обострИть","v"],
+      ["одолжИть","v"], ["одолжИт","v"],
+      ["озлОбить","v"],
+      ["оклЕить","v"],
+      ["окружИт","v"], ["окружИть","v"],
+      ["опОшлить","v"],
+      ["освЕдомиться","v"], ["освЕдомится","v"],
+      ["отбылА","v"], ["отбЫть","v"],
+      ["отдалА","v"], ["отдАть","v"],
+      ["откУпорить","v"],
+      ["отозвалА","v"], ["отозвАть","v"], ["отозвалАсь","v"], ["отозвАться","v"],
+      ["перезвонИт","v"], ["перезвонИть","v"],
+      ["перелилА","v"], ["перелИть","v"],
+      ["плодоносИть","v"],
+      ["пломбировАть","v"],
+      ["повторИт","v"], ["повторИть","v"],
+      ["позвалА","v"], ["позвАть","v"],
+      ["позвонИт","v"], ["позвонИть","v"],
+      ["полилА","v"], ["полИть","v"],
+      ["положИть","v"], ["положИл","v"],
+      ["понЯть","v"], ["понялА","v"],
+      ["послАла","v"], ["послАть","v"],
+      ["прибЫть","v"], ["прИбыл","v"], ["прибылА","v"], ["прИбыли","v"],
+      ["принЯть","v"], ["прИнял","v"], ["принялА","v"], ["прИняли","v"],
+      ["рвалА","v"],
+      ["сверлИт","v"], ["сверлИть","v"],
+      ["снялА","v"],
+      ["совралА","v"], ["соврАть","v"],
+      ["создалА","v"], ["создАть","v"],
+      ["сорвалА","v"], ["сорвАть","v"],
+      ["сорИт","v"], ["сорИть","v"],
+      ["убралА","v"], ["убрАть","v"],
+      ["углубИть","v"],
+      ["укрепИт","v"], ["укрепИть","v"],
+      ["чЕрпать","v"],
+      ["щемИт","v"], ["щемИть","v"],
+      ["щЁлкать","v"],
+
+      ["довезЁнный","p"],
+      ["зАгнутый","p"],
+      ["зАнятый","p"], ["занятА","p"],
+      ["зАпертый","p"],
+      ["заселЁнный","p"], ["заселенА","p"],
+      ["кормЯщий","p"],
+      ["кровоточАщий","p"],
+      ["нажИвший","p"],
+      ["налИвший","p"],
+      ["нанЯвшийся","p"],
+      ["начАвший","p"],
+      ["нАчатый","p"],
+      ["низведЁнный","p"],
+      ["облегчЁнный","p"],
+      ["ободрЁнный","p"],
+      ["обострЁнный","p"],
+      ["отключЁнный","p"],
+      ["повторЁнный","p"],
+      ["поделЁнный","p"],
+      ["понЯвший","p"],
+      ["прИнятый","p"], ["принятА","p"],
+      ["приручЁнный","p"],
+      ["прожИвший","p"],
+      ["снятА","p"], ["снЯтый","p"],
+      ["сОгнутый","p"],
+      ["углублЁнный","p"],
+
+      ["закУпорив","d"],
+      ["начАв","d"], ["начАвшись","d"],
+      ["отдАв","d"],
+      ["поднЯв","d"],
+      ["понЯв","d"],
+      ["прибЫв","d"],
+      ["создАв","d"],
+
+      ["вОвремя","adv"],
+      ["дОверху","adv"],
+      ["донЕльзя","adv"],
+      ["дОнизу","adv"],
+      ["дОсуха","adv"],
+      ["зАсветло","adv"],
+      ["зАтемно","adv"],
+      ["красИво","adv"],
+      ["надОлго","adv"],
+      ["ненадОлго","adv"],
+
+      ["вернА","adj"], ["вЕрный","adj"],
+      ["знАчимый","adj"],
+      ["красИвее","adj"], ["красИвый","adj"], ["красИвейший","adj"],
+      ["кУхонный","adj"],
+      ["ловкА","adj"], ["лОвкий","adj"],
+      ["мозаИчный","adj"],
+      ["оптОвый","adj"],
+      ["прозорлИвый","adj"], ["прозорлИва","adj"],
+      ["слИвовый","adj"]
+    ];
+
+    const VOWELS = "аеёиоуыэюя";
+    const MAX_ATTEMPTS = 3;
+    const MIN_OFFSET = 3;
+    const MAX_OFFSET = 5;
+
+    const CATEGORY_NAMES = {
+      n: "Имя существительное",
+      v: "Глагол",
+      p: "Причастие / отглагольное прилагательное",
+      d: "Деепричастие",
+      adv: "Наречие",
+      adj: "Имя прилагательное"
+    };
+
+    const GROUP_LABELS = {
+      all: "Все слова",
+      n: "Имена существительные",
+      v: "Глаголы",
+      p: "Причастия и деепричастия",
+      adj: "Прилагательные и наречия"
+    };
+
+    const GROUP_FILTERS = {
+      all: () => true,
+      n: w => w.cat === "n",
+      v: w => w.cat === "v",
+      p: w => w.cat === "p" || w.cat === "d",
+      adj: w => w.cat === "adj" || w.cat === "adv"
+    };
+
+    const menuScreen = document.getElementById("menuScreen");
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const backQuizBtn = document.getElementById("backQuizBtn");
+    const backResultBtn = document.getElementById("backResultBtn");
+    const restartBtn = document.getElementById("restartBtn");
+
+    const groupTag = document.getElementById("groupTag");
+    const wrongPanel = document.getElementById("wrongPanel");
+    const wrongList = document.getElementById("wrongList");
+    const progressText = document.getElementById("progressText");
+    const scoreText = document.getElementById("scoreText");
+    const barFill = document.getElementById("barFill");
+    const categoryHint = document.getElementById("categoryHint");
+    const wordDisplay = document.getElementById("wordDisplay");
+    const feedback = document.getElementById("feedback");
+    const checkBtn = document.getElementById("checkBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const resultWrong = document.getElementById("resultWrong");
+    const resultWrongList = document.getElementById("resultWrongList");
+    const resultScore = document.getElementById("resultScore");
+    const resultPercent = document.getElementById("resultPercent");
+    const resultMark = document.getElementById("resultMark");
+    const resultMessage = document.getElementById("resultMessage");
+
+    let state = {
+      group: "all",
+      queue: [],
+      current: null,
+      score: 0,
+      mastered: new Set(),
+      wrongWords: [],
+      totalUnique: 0,
+      questionNumber: 0,
+      answered: false,
+      selectedIndex: -1
+    };
+
+    function shuffle(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
+
+    function isVowel(ch) {
+      return VOWELS.includes(ch.toLowerCase());
+    }
+
+    function countVowels(str) {
+      let count = 0;
+      for (const ch of str) {
+        if (isVowel(ch)) count++;
+      }
+      return count;
+    }
+
+    function analyze(display) {
+      const plain = display.toLowerCase();
+      let idx = -1;
+      for (let i = 0; i < display.length; i++) {
+        if (display[i] !== plain[i]) { idx = i; break; }
+      }
+      return { plain, stressIndex: idx };
+    }
+
+    function displayChar(ch) {
+      return ch === "ё" ? "е" : ch;
+    }
+
+    function stressedHtml(plain, index) {
+      const before = escapeHtml(plain.slice(0, index));
+      const letter = escapeHtml(plain.charAt(index).toUpperCase());
+      const after = escapeHtml(plain.slice(index + 1));
+      return `${before}<span class="stress">${letter}</span>${after}`;
+    }
+
+    // Слово с ударной гласной (заглавной, без подчёркивания) + пояснение
+    function stressedWordHtml(item) {
+      const plain = item.plain;
+      const idx = item.stressIndex;
+      const before = escapeHtml(plain.slice(0, idx));
+      const letter = `<span class="stressed-letter">${escapeHtml(plain.charAt(idx))}</span>`;
+      const after = escapeHtml(plain.slice(idx + 1));
+      const hint = item.hint ? ` (${escapeHtml(item.hint)})` : "";
+      return `${before}${letter}${after}${hint}`;
+    }
+
+    function showOnly(el) {
+      [menuScreen, quizScreen, resultScreen].forEach(s => s.classList.add("hidden"));
+      el.classList.remove("hidden");
+    }
+
+    function startQuiz(group) {
+      state.group = group;
+
+      const items = DATA
+        .filter(item => GROUP_FILTERS[group]({ cat: item[1] }))
+        .map(item => {
+          const { plain, stressIndex } = analyze(item[0]);
+          return {
+            plain,
+            stressIndex,
+            display: item[0],
+            cat: item[1],
+            hint: item[2] || "",
+            attempts: 0,
+            isFirstAttempt: true,
+            needsRepeat: false
+          };
+        })
+        .filter(item => item.stressIndex !== -1 && countVowels(item.plain) >= 2);
+
+      state.queue = shuffle(items);
+      state.totalUnique = items.length;
+      state.score = 0;
+      state.mastered.clear();
+      state.wrongWords = [];
+      state.questionNumber = 0;
+      state.current = null;
+      state.answered = false;
+
+      groupTag.textContent = GROUP_LABELS[group];
+      showOnly(quizScreen);
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      if (state.queue.length === 0) {
+        finishQuiz();
+        return;
+      }
+
+      state.current = state.queue.shift();
+      state.current.attempts = (state.current.attempts || 0) + 1;
+      state.current.isFirstAttempt = (state.current.attempts === 1);
+      state.current.needsRepeat = false;
+
+      state.answered = false;
+      state.selectedIndex = -1;
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const cur = state.current;
+
+      progressText.textContent = `Вопрос ${state.questionNumber + 1}`;
+      scoreText.textContent = `Баллы: ${state.score} из ${state.totalUnique}`;
+      barFill.style.width = `${state.totalUnique ? (state.mastered.size / state.totalUnique) * 100 : 0}%`;
+
+      categoryHint.textContent = CATEGORY_NAMES[cur.cat] || "";
+
+      feedback.className = "feedback hidden";
+      feedback.innerHTML = "";
+
+      checkBtn.classList.remove("hidden");
+      checkBtn.disabled = true;
+      nextBtn.classList.add("hidden");
+
+      renderWrongPanel();
+      renderWordChips();
+    }
+
+    function renderWordChips() {
+      const cur = state.current;
+      const plain = cur.plain;
+
+      wordDisplay.innerHTML = "";
+
+      for (let i = 0; i < plain.length; i++) {
+        const ch = plain[i];
+
+        if (isVowel(ch)) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "vowel";
+          btn.textContent = displayChar(ch);
+          btn.dataset.index = String(i);
+
+          if (state.answered) {
+            if (i === cur.stressIndex) btn.classList.add("correct");
+            else if (i === state.selectedIndex) btn.classList.add("wrong");
+            btn.disabled = true;
+          } else {
+            if (i === state.selectedIndex) btn.classList.add("selected");
+            btn.addEventListener("click", () => selectVowel(i));
+          }
+
+          wordDisplay.appendChild(btn);
+        } else {
+          const span = document.createElement("span");
+          span.className = "letter";
+          span.textContent = ch;
+          wordDisplay.appendChild(span);
+        }
+      }
+
+      if (cur.hint) {
+        const hintEl = document.createElement("span");
+        hintEl.className = "word-hint";
+        hintEl.textContent = `(${cur.hint})`;
+        wordDisplay.appendChild(hintEl);
+      }
+    }
+
+    function selectVowel(index) {
+      if (state.answered) return;
+      state.selectedIndex = index;
+      checkBtn.disabled = false;
+      renderWordChips();
+    }
+
+    function renderWrongPanel() {
+      if (state.wrongWords.length === 0) {
+        wrongPanel.classList.add("hidden");
+        return;
+      }
+      wrongPanel.classList.remove("hidden");
+      wrongList.innerHTML = state.wrongWords
+        .map(item => `<span class="wrong-word">${stressedWordHtml(item)}</span>`)
+        .join("");
+    }
+
+    function checkAnswer() {
+      if (state.answered || state.selectedIndex === -1) return;
+
+      state.answered = true;
+      const cur = state.current;
+      const isCorrect = state.selectedIndex === cur.stressIndex;
+      const isFirst = cur.isFirstAttempt;
+
+      if (isCorrect) {
+        if (isFirst) state.score++;
+        state.mastered.add(cur.plain + "|" + cur.hint);
+      } else {
+        if (isFirst) {
+          const key = cur.plain + "|" + cur.hint;
+          const exists = state.wrongWords.some(w => (w.plain + "|" + w.hint) === key);
+          if (!exists) state.wrongWords.push(cur);
+        }
+        if (cur.attempts < MAX_ATTEMPTS) {
+          cur.needsRepeat = true;
+        }
+      }
+
+      renderWordChips();
+
+      const answerHtml = stressedHtml(cur.plain, cur.stressIndex);
+      let meta = escapeHtml(CATEGORY_NAMES[cur.cat] || "");
+      if (cur.hint) {
+        meta += ` · ${escapeHtml(cur.hint)}`;
+      }
+      if (cur.plain.charAt(cur.stressIndex) === "ё") {
+        meta += " · Буква ё всегда ударная";
+      }
+
+      feedback.innerHTML = `
+        <div class="feedback__answer">${answerHtml}</div>
+        <div class="feedback__meta">${meta}</div>
+      `;
+      feedback.className = isCorrect ? "feedback ok" : "feedback bad";
+
+      scoreText.textContent = `Баллы: ${state.score} из ${state.totalUnique}`;
+      barFill.style.width = `${(state.mastered.size / state.totalUnique) * 100}%`;
+
+      renderWrongPanel();
+
+      checkBtn.classList.add("hidden");
+      nextBtn.classList.remove("hidden");
+      nextBtn.textContent = (state.queue.length === 0 && !cur.needsRepeat)
+        ? "Показать результат"
+        : "Следующее слово";
+    }
+
+    function goNext() {
+      if (!state.answered) return;
+
+      const cur = state.current;
+
+      if (cur.needsRepeat) {
+        const offset = MIN_OFFSET + Math.floor(Math.random() * (MAX_OFFSET - MIN_OFFSET + 1));
+        const insertAt = Math.min(offset - 1, state.queue.length);
+        state.queue.splice(insertAt, 0, { ...cur, needsRepeat: false });
+      }
+
+      state.questionNumber++;
+
+      if (state.queue.length === 0) {
+        finishQuiz();
+      } else {
+        nextQuestion();
+      }
+    }
+
+    function finishQuiz() {
+      const percent = state.totalUnique
+        ? Math.round((state.score / state.totalUnique) * 100)
+        : 0;
+
+      let mark = "2";
+      if (percent >= 90) mark = "5";
+      else if (percent >= 75) mark = "4";
+      else if (percent >= 60) mark = "3";
+
+      resultScore.textContent = `${state.score} из ${state.totalUnique}`;
+      resultPercent.textContent = `${percent}%`;
+      resultMark.textContent = mark;
+
+      if (state.wrongWords.length > 0) {
+        resultWrong.classList.remove("hidden");
+        resultWrongList.innerHTML = state.wrongWords
+          .map(item => `<span class="wrong-word">${stressedWordHtml(item)}</span>`)
+          .join("");
+      } else {
+        resultWrong.classList.add("hidden");
+        resultWrongList.innerHTML = "";
+      }
+
+      if (percent >= 90) {
+        resultMessage.textContent = "Отличный результат! Орфоэпические нормы усвоены хорошо.";
+      } else if (percent >= 75) {
+        resultMessage.textContent = "Хороший результат. Повторите слова, где были ошибки.";
+      } else if (percent >= 60) {
+        resultMessage.textContent = "Есть над чем поработать. Повторите словник и пройдите тест ещё раз.";
+      } else {
+        resultMessage.textContent = "Пока результат невысокий. Повторите орфоэпический словник и попробуйте снова.";
+      }
+
+      showOnly(resultScreen);
+    }
+
+    document.querySelectorAll(".topic-card").forEach(card => {
+      card.addEventListener("click", () => startQuiz(card.dataset.group));
+      card.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          card.click();
+        }
+      });
+    });
+
+    checkBtn.addEventListener("click", checkAnswer);
+    nextBtn.addEventListener("click", goNext);
+
+    backQuizBtn.addEventListener("click", () => showOnly(menuScreen));
+    backResultBtn.addEventListener("click", () => showOnly(menuScreen));
+    restartBtn.addEventListener("click", () => startQuiz(state.group));
+
+    showOnly(menuScreen);
+  </script>
+</body>
+</html>
