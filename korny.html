@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Безударные непроверяемые гласные в корне слова — тест 11 класс</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 45%, #ecfeff 100%);
+      color: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .app { width: min(860px, 100%); }
+
+    header { text-align: center; margin-bottom: 18px; }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(22px, 4vw, 32px);
+      line-height: 1.2;
+      color: #1e3a8a;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid #dbeafe;
+      border-radius: 22px;
+      box-shadow: 0 20px 45px rgba(30, 64, 175, 0.12);
+      padding: clamp(18px, 4vw, 32px);
+      backdrop-filter: blur(8px);
+    }
+
+    .hidden { display: none !important; }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #2563eb;
+      color: #fff;
+      transition: 0.2s ease;
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn:hover:not(:disabled) { background: #1d4ed8; transform: translateY(-1px); }
+    .btn:active:not(:disabled) { transform: translateY(0); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 10px;
+    }
+
+    .bar {
+      height: 10px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .bar__fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2563eb, #06b6d4);
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: clamp(18px, 3vw, 22px);
+      color: #1e293b;
+      text-align: center;
+    }
+
+    .word {
+      text-align: center;
+      font-size: clamp(24px, 5vw, 42px);
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      color: #0f172a;
+      margin: 18px 0 24px;
+      word-break: break-word;
+      line-height: 1.3;
+    }
+
+    .blank {
+      display: inline-block;
+      width: 1.05em;
+      height: 1em;
+      border-bottom: 4px solid #2563eb;
+      margin: 0 0.08em;
+      vertical-align: -0.08em;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 0 0 18px;
+    }
+
+    .blank-group {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .blank-label {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #475569;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .letter-options {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .option {
+      flex: 1;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px 10px;
+      font-size: 26px;
+      font-weight: 800;
+      color: #1e293b;
+      cursor: pointer;
+      transition: 0.18s ease;
+      max-width: 150px;
+    }
+
+    .option:hover:not(:disabled) {
+      border-color: #2563eb;
+      background: #eff6ff;
+      transform: translateY(-1px);
+    }
+
+    .option:disabled { cursor: default; }
+
+    .option.selected {
+      border-color: #2563eb;
+      background: #dbeafe;
+      color: #1e3a8a;
+    }
+
+    .option.correct {
+      border-color: #16a34a;
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .option.wrong {
+      border-color: #dc2626;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .feedback {
+      min-height: 28px;
+      line-height: 1.5;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 15px;
+      margin: 0 0 14px;
+    }
+
+    .feedback.ok {
+      background: #ecfdf5;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .feedback.bad {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Панель ошибок сверху */
+    .wrong-panel {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 14px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+    }
+
+    .wrong-panel__label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #991b1b;
+      margin-bottom: 6px;
+    }
+
+    .wrong-panel__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: 72px;
+      overflow-y: auto;
+    }
+
+    .wrong-word {
+      display: inline-block;
+      background: #fff;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: 2px 8px;
+      font-size: 13px;
+      color: #991b1b;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    /* Результаты */
+    .result { text-align: center; }
+
+    .result__wrong {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .result__wrong-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #991b1b;
+      margin-bottom: 8px;
+    }
+
+    .result__wrong-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .result__wrong-list .wrong-word {
+      background: #fff;
+      padding: 3px 10px;
+      font-size: 14px;
+    }
+
+    .result__score {
+      font-size: clamp(34px, 7vw, 58px);
+      font-weight: 900;
+      color: #1e3a8a;
+      margin: 8px 0;
+    }
+
+    .result__percent {
+      font-size: 22px;
+      font-weight: 700;
+      color: #0e7490;
+      margin-bottom: 12px;
+    }
+
+    .result__mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #dbeafe;
+      color: #1e40af;
+      font-size: 38px;
+      font-weight: 900;
+      margin: 10px 0 14px;
+    }
+
+    .result__message {
+      color: #475569;
+      font-size: 17px;
+      line-height: 1.55;
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 520px) {
+      .topline { font-size: 13px; }
+      .option { font-size: 23px; padding: 11px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>Безударные непроверяемые гласные в корне слова</h1>
+    </header>
+
+    <section id="quizScreen" class="card">
+      <div id="wrongWordsPanel" class="wrong-panel hidden">
+        <div class="wrong-panel__label">Слова, написанные с ошибкой:</div>
+        <div id="wrongWordsList" class="wrong-panel__list"></div>
+      </div>
+
+      <div class="topline">
+        <span id="progressText">Вопрос 1</span>
+        <span id="scoreText">Баллы: 0</span>
+      </div>
+      <div class="bar"><div id="barFill" class="bar__fill"></div></div>
+
+      <h2>Вставь пропущенные безударные гласные в корне</h2>
+      <div id="wordDisplay" class="word"></div>
+      <div id="options" class="options"></div>
+      <div id="feedback" class="feedback"></div>
+      <div class="actions">
+        <button id="checkBtn" class="btn" type="button" disabled>Проверить</button>
+        <button id="nextBtn" class="btn hidden" type="button">Следующий вопрос</button>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="card result hidden">
+      <h2>Результат теста</h2>
+      <div id="resultWrong" class="result__wrong hidden">
+        <div class="result__wrong-title">Слова, написанные с ошибкой:</div>
+        <div id="resultWrongList" class="result__wrong-list"></div>
+      </div>
+      <div id="resultScore" class="result__score">0</div>
+      <div id="resultPercent" class="result__percent">0%</div>
+      <div id="resultMark" class="result__mark">2</div>
+      <div id="resultMessage" class="result__message"></div>
+      <button id="restartBtn" class="btn" type="button">Пройти ещё раз</button>
+    </section>
+  </main>
+
+  <script>
+    // В словах расставлены ударения (знак U+0301 после ударной гласной).
+    // Буква «ё» всегда считается ударной.
+    const WORDS = [
+      "абажу́р", "абитурие́нт", "абонеме́нт", "абориге́н", "аборда́ж", "абсолю́тный", "аванга́рд", "авантю́ра", "автома́т", "агроно́м", "агрега́т", "адвока́т", "аквамари́н", "акваре́ль", "акклиматиза́ция", "аккомпанеме́нт", "аккордео́н", "аккура́тный", "акроба́т", "алгори́тм", "аллего́рия", "альпини́ст", "альмана́х", "аляпова́тый", "анана́с", "аннота́ция", "анома́лия", "антагони́ст", "анса́мбль", "антресо́ли", "апартаме́нты", "аплодисме́нты", "апелля́ция", "аппети́т", "адапта́ция", "арома́т", "артилле́рия", "архитекту́ра", "астроно́мия", "атмосфе́ра", "аттеста́т", "аттракцио́н", "аудито́рия", "афори́зм",
+      "бага́ж", "багря́ный", "бадминто́н", "батальо́н", "батали́ст", "баррика́да", "балко́н", "балло́н", "балла́ст", "бандеро́ль", "бакала́вр", "бакале́я", "барелье́ф", "баро́метр", "барье́р", "бассе́йн", "бастио́н", "батаре́я", "бахрома́", "бечева́", "бето́н", "беллетри́стика", "берло́га", "бегемо́т", "бере́т", "биатло́н", "бидо́н", "бифште́кс", "бизнесме́н", "блинда́ж", "боге́ма", "богаты́рь", "бога́тство", "бока́л", "ботфо́рт", "бордю́р", "босто́н", "бойко́т", "брава́да", "браконье́р", "бриллиа́нт", "брошю́ра", "бюллете́нь",
+      "вака́нсия", "ватру́шка", "вандали́зм", "валидо́л", "валю́та", "ванили́н", "вазели́н", "вакци́на", "вентиля́тор", "ветерина́р", "ветера́н", "вермише́ль", "вертолёт", "велосипе́д", "вестибю́ль", "весну́шчатый", "верниса́ж", "вертика́ль", "ветчина́", "вельве́т", "велю́р", "винегре́т", "вира́ж", "виртуо́з", "витами́н", "витра́ж", "виолонче́ль", "виртуа́льный", "водеви́ль", "возража́ть", "воробе́й", "восто́к", "волейбо́л", "воображе́ние", "воркова́ть", "воя́ж",
+      "габари́ты", "галере́я", "гарнизо́н", "гардеро́б", "гармо́ния", "гама́к", "гара́ж", "гастролёр", "гегемо́ния", "генера́л", "генера́ция", "гермети́чный", "генеало́гия", "гиаци́нт", "гипо́теза", "гипе́рбола", "гирля́нда", "гладио́лус", "горизо́нт", "гото́вый", "гобеле́н", "грома́дный",
+      "деба́ты", "дебю́т", "дезерти́р", "деклара́ция", "деклами́ровать", "декорати́вный", "депута́т", "деликате́с", "демисезо́нный", "демонстри́ровать", "дефици́т", "диабе́т", "диапазо́н", "дивиде́нд", "диви́зия", "дилета́нт", "директи́ва", "дивертисме́нт", "диагона́ль", "диаде́ма", "дизентери́я", "дилижа́нс", "дирижа́бль", "дирижёр", "дисципли́на", "диску́ссия", "диста́нция", "дифира́мбы", "дифференци́ровать", "диора́ма", "довле́ть", "доскона́льно",
+      "ерети́к", "есау́л",
+      "жа́воронок", "жела́ние", "желати́н", "живопи́сный", "жонглёр",
+      "забасто́вка", "загроможде́ние", "землетрясе́ние",
+      "игнори́ровать", "идио́ма", "идеоло́гия", "иждиве́нец", "иллюмина́тор", "икеба́на", "имита́ция", "инициати́ва", "интеллиге́нтный", "индеве́ть", "инциде́нт", "интерпрета́ция", "интелле́кт", "интенси́вный", "интерье́р", "инжене́р", "искове́рканный",
+      "каблу́к", "кавале́рия", "кавы́чки", "какофо́ния", "календа́рь", "кало́рия", "каламбу́р", "кампа́ния (военная, предвыборная)", "камо́рка", "канифо́ль", "капюшо́н", "карава́й", "карака́тица", "карнава́л", "карбюра́тор", "карикату́ра", "катастро́фа", "канона́да", "кастрю́ля", "катакли́зм", "катако́мба", "кашеми́р", "кенгуру́", "кера́мика", "кобура́", "кова́рный", "колдова́ть", "колори́т", "комбинезо́н", "компа́ния (приятелей)", "компете́нтный", "компенса́ция", "комплиме́нт", "компонова́ть", "компаньо́н", "компромисс", "консервато́рия", "контине́нт", "конфигура́ция", "конфо́рка", "коридо́р", "корифе́й", "корнишо́н", "компости́ровать", "ковыря́ть", "кого́рта", "коали́ция", "коли́бри", "колча́н", "конфиденциа́льный", "кори́чневый", "коромы́сло", "корпора́ция", "контингéнт", "крите́рий", "кроме́шный",
+      "лабири́нт", "лаборато́рия", "лазу́рь", "лампа́с", "ландша́фт", "леле́ять", "линоле́ум", "лопа́та", "лотере́я", "лягу́шка",
+      "мавзоле́й", "мажо́рный", "макулату́ра", "манипуля́ция", "манифе́ст", "манса́рда", "марина́д", "менталите́т", "меридиа́н", "метаморфо́за", "метеори́т", "метрополите́н", "мецена́т", "моза́ика", "мозо́ль", "монасты́рь", "мотиви́ровать", "мизи́нец", "миниатю́ра", "мино́рный",
+      "наважде́ние", "навига́ция", "насеко́мое", "натюрмо́рт", "нафтали́н", "неологи́зм", "недосяга́емый", "нивели́ровать", "нове́лла", "ноктю́рн", "ностальги́я", "нота́ция", "нумера́ция",
+      "обая́ние", "обагрённый", "обворожи́ть", "обели́ск", "облига́ция", "обоня́ние", "обогаща́ть", "обсервато́рия", "одоле́ть", "оккупа́нт", "ола́дьи", "олимпиа́да", "омони́мия", "оптимисти́ческий", "оригина́льный", "оранжере́я", "орео́л", "орна́мент", "ориента́ция", "отраже́ние",
+      "палиса́дник", "пали́тра", "панора́ма", "пара́бола", "паради́гма", "парадо́кс", "парапе́т", "паралле́ль", "паро́м", "партиту́ра", "пассажи́р", "педа́ль", "пейза́ж", "пелика́н", "перспекти́ва", "перифе́рия", "перифра́з", "пессими́ст", "пирамида́льный", "плагиа́т", "плея́да", "подража́ние", "поколе́ние", "пороло́н", "портье́ра", "предвари́тельный", "преамбу́ла", "презента́бельный", "президе́нт", "претенде́нт", "прерогати́ва", "прести́ж", "претен́зия", "привере́дливый", "привиле́гия", "примити́вный", "приорите́т", "пропага́нда",
+      "реабилита́ция", "ревера́нс", "регла́мент", "режиссёр", "резиде́нция", "резона́нс", "резюме́", "репети́ция", "реставри́ровать", "рее́стр", "респекта́бельный", "респира́тор", "рефере́ндум", "рикоше́т", "ритуа́л", "рото́нда",
+      "санато́рий", "свиде́тельство", "свире́пый", "семина́р", "сентимента́льный", "серена́да", "серпанти́н", "сертифика́т", "симфо́ния", "сире́невый", "скафа́ндр", "сиро́п", "соба́ка", "сона́та", "скарлати́на", "снеги́рь", "спонта́нный", "скомпоно́ванный", "сталакти́т", "стелла́ж", "стипе́ндия", "стреко́за", "стреми́ться", "суверените́т",
+      "табуре́т", "тала́нт", "таре́лка", "теле́га", "тео́рия", "терра́са", "типогра́фия", "тореадо́р", "торжество́", "торше́р", "тота́льный", "траге́дия", "тради́ция", "трактова́ть", "трампли́н", "трансля́ция", "трафаре́т", "трево́жный", "тре́нер", "трибу́на", "триумфа́льный", "тротуа́р", "трубаду́р",
+      "увертю́ра", "уве́личивать", "университе́т", "уника́льный", "урага́н", "утрамбова́ть", "утилита́рный",
+      "фанта́зия", "фантасмаго́рия", "фарва́тер", "фарфо́р", "фасо́ль", "фестива́ль", "фено́мен", "фешене́бельный", "фиа́ско", "филармо́ния", "флами́нго", "фрикаде́лька", "форе́ль", "фортепиа́но", "фронто́н", "филатели́ст", "фюзеля́ж",
+      "хорео́граф", "хрестома́тия", "хризанте́ма", "хроноло́гия",
+      "целлофа́н", "цеме́нт", "церемо́ния", "цикло́н", "цифербла́т",
+      "чемода́н", "чесно́к",
+      "шеде́вр", "шере́нга", "шерохова́тый", "шевелю́ра", "шпага́т",
+      "эволю́ция", "эгои́зм", "эквивале́нт", "экипа́ж", "экипирова́ть", "экспериме́нт", "экспона́т", "экстрема́льный", "элеме́нт", "эликси́р", "экзамена́тор", "экскава́тор", "экстравага́нтный", "энциклопе́дия", "эпизо́д", "эпистоля́рный", "эстака́да", "эшело́н",
+      "ювели́р"
+    ];
+
+    const VOWELS = "аеёиоуыэюя";
+    const MAX_BLANKS = 2;
+    const STRESS_MARK = "\u0301";
+    const MAX_ATTEMPTS = 3;
+    const MIN_OFFSET = 3;
+    const MAX_OFFSET = 5;
+
+    const CONFUSABLE = {
+      "а": "о", "о": "а", "е": "и", "и": "е",
+      "я": "е", "у": "о", "ю": "у", "э": "е", "ы": "и"
+    };
+
+    const quizScreen = document.getElementById("quizScreen");
+    const resultScreen = document.getElementById("resultScreen");
+
+    const restartBtn = document.getElementById("restartBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const checkBtn = document.getElementById("checkBtn");
+
+    const progressText = document.getElementById("progressText");
+    const scoreText = document.getElementById("scoreText");
+    const barFill = document.getElementById("barFill");
+    const wordDisplay = document.getElementById("wordDisplay");
+    const optionsBox = document.getElementById("options");
+    const feedback = document.getElementById("feedback");
+
+    const wrongWordsPanel = document.getElementById("wrongWordsPanel");
+    const wrongWordsList = document.getElementById("wrongWordsList");
+
+    const resultScore = document.getElementById("resultScore");
+    const resultPercent = document.getElementById("resultPercent");
+    const resultMark = document.getElementById("resultMark");
+    const resultMessage = document.getElementById("resultMessage");
+    const resultWrong = document.getElementById("resultWrong");
+    const resultWrongList = document.getElementById("resultWrongList");
+
+    let queue = [];
+    let current = null;
+    let score = 0;
+    let mastered = new Set();
+    let wrongWords = [];
+    let totalUnique = 0;
+    let questionNumber = 0;
+    let answered = false;
+    let selections = [];
+
+    function shuffle(array) {
+      const copy = [...array];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, ch => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+      }[ch]));
+    }
+
+    function capitalize(str) {
+      if (!str) return str;
+      return str.charAt(0).toLocaleUpperCase("ru") + str.slice(1);
+    }
+
+    function showScreen(name) {
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      if (name === "quiz") quizScreen.classList.remove("hidden");
+      if (name === "result") resultScreen.classList.remove("hidden");
+    }
+
+    function parseStressedWord(stressed) {
+      let clean = "";
+      const stressedIndices = new Set();
+      let i = 0;
+      while (i < stressed.length) {
+        const ch = stressed[i];
+        if (ch === STRESS_MARK) { i++; continue; }
+        if (VOWELS.includes(ch)) {
+          const cleanIndex = clean.length;
+          clean += ch;
+          if (ch === "ё") {
+            stressedIndices.add(cleanIndex);
+          } else if (stressed[i + 1] === STRESS_MARK) {
+            stressedIndices.add(cleanIndex);
+            i++;
+          }
+        } else {
+          clean += ch;
+        }
+        i++;
+      }
+      return { clean, stressedIndices };
+    }
+
+    function getBaseEnd(clean) {
+      const stop = clean.search(/[\s(]/);
+      return stop === -1 ? clean.length : stop;
+    }
+
+    function getEndingStart(clean, baseEnd) {
+      if (baseEnd === 0) return 0;
+      const lastIdx = baseEnd - 1;
+      const lastChar = clean[lastIdx];
+
+      if (VOWELS.includes(lastChar)) return lastIdx;
+
+      if (lastChar === "й" && lastIdx > 0 && VOWELS.includes(clean[lastIdx - 1])) {
+        return lastIdx - 1;
+      }
+
+      return baseEnd;
+    }
+
+    function getUnstressedVowelPositions(clean, stressedIndices) {
+      const baseEnd = getBaseEnd(clean);
+      const endingStart = getEndingStart(clean, baseEnd);
+      const positions = [];
+
+      for (let i = 0; i < baseEnd; i++) {
+        if (VOWELS.includes(clean[i]) && !stressedIndices.has(i) && i < endingStart) {
+          positions.push(i);
+        }
+      }
+
+      return positions;
+    }
+
+    function choosePositions(positions) {
+      if (positions.length <= MAX_BLANKS) return positions;
+      return [positions[0], positions[positions.length - 1]];
+    }
+
+    function buildDisplay(clean, blanks) {
+      const blankByIndex = new Map(blanks.map((blank, i) => [blank.index, i]));
+      let html = "";
+      for (let i = 0; i < clean.length; i++) {
+        if (blankByIndex.has(i)) {
+          const number = blankByIndex.get(i) + 1;
+          html += `<span class="blank" aria-label="Пропуск ${number}"></span>`;
+        } else {
+          html += escapeHtml(clean[i]);
+        }
+      }
+      return html;
+    }
+
+    function buildQuestion(stressedWord) {
+      const { clean, stressedIndices } = parseStressedWord(stressedWord);
+      const positions = getUnstressedVowelPositions(clean, stressedIndices);
+
+      if (!positions.length) return null;
+
+      const chosen = choosePositions(positions);
+      const blanks = chosen.map(index => {
+        const correct = clean[index];
+        const other = CONFUSABLE[correct] || "о";
+        return { index, correct, options: shuffle([correct, other]) };
+      });
+
+      return {
+        word: clean,
+        display: buildDisplay(clean, blanks),
+        blanks,
+        attempts: 0,
+        isFirstAttempt: true,
+        needsRepeat: false
+      };
+    }
+
+    function startQuiz() {
+      const uniqueWords = [...new Set(
+        WORDS.map(word => word.toLocaleLowerCase("ru").trim())
+      )];
+
+      totalUnique = uniqueWords.length;
+      queue = shuffle(uniqueWords)
+        .map(buildQuestion)
+        .filter(Boolean);
+
+      score = 0;
+      mastered.clear();
+      wrongWords = [];
+      questionNumber = 0;
+      current = null;
+
+      showScreen("quiz");
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      if (queue.length === 0) {
+        finishQuiz();
+        return;
+      }
+
+      current = queue.shift();
+      current.attempts = (current.attempts || 0) + 1;
+      current.isFirstAttempt = (current.attempts === 1);
+      current.needsRepeat = false;
+
+      answered = false;
+      selections = new Array(current.blanks.length).fill(null);
+
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      progressText.textContent = `Вопрос ${questionNumber + 1}`;
+      scoreText.textContent = `Баллы: ${score}`;
+
+      const masteredRatio = totalUnique ? mastered.size / totalUnique : 0;
+      barFill.style.width = `${masteredRatio * 100}%`;
+
+      wordDisplay.innerHTML = current.display;
+
+      optionsBox.innerHTML = "";
+      feedback.className = "feedback";
+      feedback.innerHTML = "";
+
+      checkBtn.classList.remove("hidden");
+      checkBtn.disabled = true;
+      nextBtn.classList.add("hidden");
+
+      renderWrongWordsPanel();
+
+      current.blanks.forEach((blank, blankIndex) => {
+        const group = document.createElement("div");
+        group.className = "blank-group";
+
+        const label = document.createElement("div");
+        label.className = "blank-label";
+        label.textContent = `Пропуск ${blankIndex + 1}`;
+
+        const row = document.createElement("div");
+        row.className = "letter-options";
+
+        blank.options.forEach(letter => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "option";
+          button.textContent = letter;
+          button.dataset.blank = String(blankIndex);
+          button.dataset.letter = letter;
+
+          button.addEventListener("click", () => {
+            if (answered) return;
+            selections[blankIndex] = letter;
+            const groupButtons = optionsBox.querySelectorAll(
+              `.option[data-blank="${blankIndex}"]`
+            );
+            groupButtons.forEach(btn => {
+              btn.classList.toggle("selected", btn.dataset.letter === letter);
+            });
+            checkBtn.disabled = selections.some(l => l === null);
+          });
+
+          row.appendChild(button);
+        });
+
+        group.appendChild(label);
+        group.appendChild(row);
+        optionsBox.appendChild(group);
+      });
+    }
+
+    function renderWrongWordsPanel() {
+      if (wrongWords.length === 0) {
+        wrongWordsPanel.classList.add("hidden");
+        return;
+      }
+      wrongWordsPanel.classList.remove("hidden");
+      wrongWordsList.innerHTML = wrongWords
+        .map(w => `<span class="wrong-word">${escapeHtml(capitalize(w))}</span>`)
+        .join("");
+    }
+
+    function checkAnswers() {
+      if (answered || selections.some(letter => letter === null)) return;
+      answered = true;
+
+      const allCorrect = current.blanks.every((blank, i) => {
+        return selections[i] === blank.correct;
+      });
+
+      const isFirstAttempt = current.isFirstAttempt;
+
+      if (allCorrect) {
+        if (isFirstAttempt) score++;
+        mastered.add(current.word);
+      } else {
+        if (isFirstAttempt && !wrongWords.includes(current.word)) {
+          wrongWords.push(current.word);
+        }
+        if (current.attempts < MAX_ATTEMPTS) {
+          current.needsRepeat = true;
+        }
+      }
+
+      // Визуальная проверка
+      const allButtons = [...optionsBox.querySelectorAll(".option")];
+      allButtons.forEach(button => {
+        const blankIndex = Number(button.dataset.blank);
+        const letter = button.dataset.letter;
+        const correct = current.blanks[blankIndex].correct;
+
+        button.disabled = true;
+        button.classList.remove("selected");
+
+        if (letter === correct) {
+          button.classList.add("correct");
+        } else if (letter === selections[blankIndex]) {
+          button.classList.add("wrong");
+        }
+      });
+
+      const correctList = current.blanks
+        .map((blank, i) => `${i + 1} — <b>${blank.correct}</b>`)
+        .join(", ");
+
+      if (allCorrect) {
+        let msg = `<strong>Верно!</strong> Словарное слово: <b>${current.word}</b>.`;
+        if (!isFirstAttempt) {
+          msg = `<strong>Правильно!</strong> Словарное слово: <b>${current.word}</b>.`;
+        }
+        feedback.innerHTML = msg;
+        feedback.className = "feedback ok";
+      } else {
+        let extra = "";
+        if (current.needsRepeat) {
+          extra = " Слово будет повторено позже.";
+        } else if (current.attempts >= MAX_ATTEMPTS) {
+          extra = " Попытки исчерпаны.";
+        }
+        feedback.innerHTML = `<strong>Неверно.</strong> Правильные буквы: ${correctList}. Словарное слово: <b>${current.word}</b>.${extra}`;
+        feedback.className = "feedback bad";
+      }
+
+      scoreText.textContent = `Баллы: ${score}`;
+      const masteredRatio = totalUnique ? mastered.size / totalUnique : 0;
+      barFill.style.width = `${masteredRatio * 100}%`;
+
+      renderWrongWordsPanel();
+
+      checkBtn.classList.add("hidden");
+      nextBtn.classList.remove("hidden");
+      nextBtn.textContent = (queue.length === 0 && !current.needsRepeat)
+        ? "Показать результат"
+        : "Следующий вопрос";
+    }
+
+    function goNext() {
+      if (!answered) return;
+
+      if (current.needsRepeat) {
+        // Вставляем повтор через 3–5 позиций
+        const offset = MIN_OFFSET + Math.floor(Math.random() * (MAX_OFFSET - MIN_OFFSET + 1));
+        const insertAt = Math.min(offset - 1, queue.length);
+        const repeat = { ...current, needsRepeat: false };
+        queue.splice(insertAt, 0, repeat);
+      }
+
+      questionNumber++;
+      nextQuestion();
+    }
+
+    function finishQuiz() {
+      const percent = totalUnique
+        ? Math.round((score / totalUnique) * 100)
+        : 0;
+
+      let mark = "2";
+      if (percent >= 90) mark = "5";
+      else if (percent >= 75) mark = "4";
+      else if (percent >= 60) mark = "3";
+
+      resultScore.textContent = `${score} из ${totalUnique}`;
+      resultPercent.textContent = `${percent}%`;
+      resultMark.textContent = mark;
+
+      if (wrongWords.length > 0) {
+        resultWrong.classList.remove("hidden");
+        resultWrongList.innerHTML = wrongWords
+          .map(w => `<span class="wrong-word">${escapeHtml(capitalize(w))}</span>`)
+          .join("");
+      } else {
+        resultWrong.classList.add("hidden");
+        resultWrongList.innerHTML = "";
+      }
+
+      if (percent >= 90) {
+        resultMessage.textContent = "Отличный результат! Словарные слова усвоены хорошо.";
+      } else if (percent >= 75) {
+        resultMessage.textContent = "Хороший результат. Обратите внимание на слова, где были ошибки.";
+      } else if (percent >= 60) {
+        resultMessage.textContent = "Есть над чем поработать. Повторите словарные слова и пройдите тест ещё раз.";
+      } else {
+        resultMessage.textContent = "Пока результат невысокий. Повторите тему «Безударные непроверяемые гласные в корне слова» и попробуйте снова.";
+      }
+
+      showScreen("result");
+    }
+
+    restartBtn.addEventListener("click", startQuiz);
+    checkBtn.addEventListener("click", checkAnswers);
+    nextBtn.addEventListener("click", goNext);
+
+    // Тест запускается сразу при открытии страницы.
+    startQuiz();
+  </script>
+</body>
+</html>
